@@ -51,7 +51,6 @@ app.get("/cases", (req, res) => {
   });
 });
 
-
 // Add a new case 
 app.post("/add-case", (req, res) => {
   console.log("Received Data:", req.body); // debug
@@ -70,8 +69,7 @@ app.post("/add-case", (req, res) => {
       REMARKS_DECISION,
       PENALTY,
       INDEX_CARDS
-
-      
+  
   } = req.body;
 
   const sql = `INSERT INTO cases (DOCKET_NO, DATE_FILED, COMPLAINANT, RESPONDENT, OFFENSE, DATE_RESOLVED, RESOLVING_PROSECUTOR, CRIM_CASE_NO, BRANCH, DATEFILED_IN_COURT, REMARKS, REMARKS_DECISION, PENALTY, INDEX_CARDS) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
@@ -146,13 +144,10 @@ const { docket_no, respondent, resolving_prosecutor, remarks, start_date, end_da
 });
 
 // edit case
-
 app.post("/update-case", (req, res) => {
-  const { original_docket_no, updated_fields } = req.body;
+  const { id, updated_fields } = req.body;
 
-  console.log("Received update request:", req.body); 
-
-  if (!original_docket_no || !updated_fields || Object.keys(updated_fields).length === 0) {
+  if (!id || !updated_fields || Object.keys(updated_fields).length === 0) {
     return res.status(400).json({ message: "Missing or incomplete data." });
   }
 
@@ -166,8 +161,8 @@ app.post("/update-case", (req, res) => {
     updateValues.push(updated_fields[field]);
   });
 
-  updateQuery += " WHERE TRIM(LOWER(DOCKET_NO)) = TRIM(LOWER(?))";
-  updateValues.push(original_docket_no.trim().toLowerCase());
+  updateQuery += " WHERE id = ?";
+  updateValues.push(id);
 
   console.log("Executing Update:", updateQuery);
   console.log("With values:", updateValues);
@@ -183,6 +178,7 @@ app.post("/update-case", (req, res) => {
     return res.json({ message: "Case updated successfully!" });
   });
 });
+
 
 //delete case
 
@@ -213,8 +209,6 @@ app.delete("/delete-case", (req, res) => {
       return res.json({ message: "Case deleted successfully!" });
   });
 });
-
-
 
 app.listen(5000, () => {
   console.log("Server running on port 5000");

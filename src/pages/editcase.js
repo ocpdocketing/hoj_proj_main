@@ -50,6 +50,7 @@ const Editcase = () => {
     { name: "CRIM_CASE_NO", label: "Criminal Case Number" },
     { name: "BRANCH", label: "Branch" },
     { name: "DATEFILED_IN_COURT", label: "Date Filed in Court" },
+    { name: "REMARKS_DECISION", label: "Decision" },
     { name: "REMARKS", label: "Remarks" },
     { name: "PENALTY", label: "Penalty" },
     { name: "INDEX_CARDS", label: "Index Card" },
@@ -78,25 +79,28 @@ const Editcase = () => {
     }));
   };
 
-  const handleSave = async (index, docketNo) => {
-    if (!editedValues[index] || Object.keys(editedValues[index]).length === 0) {
-      alert("Please select at least one field and enter a value to update.");
-      return;
-    }
+const handleSave = async (index) => {
+  if (!editedValues[index] || Object.keys(editedValues[index]).length === 0) {
+    alert("Please select at least one field and enter a value to update.");
+    return;
+  }
 
-    try {
-      console.log("Sending updated fields:", editedValues[index]);
-      await axios.post("http://localhost:5000/update-case", {
-        original_docket_no: docketNo,
-        updated_fields: editedValues[index],
-      });
-      alert("Case updated successfully!");
-      navigate(`/details/${docketNo}`);
-    } catch (error) {
-      console.error("Error updating case:", error);
-      alert("Failed to update case.");
-    }
-  };
+  const caseToUpdate = caseData[index];
+
+  try {
+    await axios.post("http://localhost:5000/update-case", {
+      id: caseToUpdate.id,  // Use unique id here instead of docket_no
+      updated_fields: editedValues[index],
+    });
+    alert("Case updated successfully!");
+    navigate(`/details/${caseToUpdate.DOCKET_NO}`);
+  } catch (error) {
+    console.error("Error updating case:", error);
+    alert("Failed to update case.");
+  }
+};
+
+
 
   return (
     <div>
@@ -204,14 +208,14 @@ const Editcase = () => {
                               ) : null
                             )}
 
-                          <button
-                            type="button"
-                            className="btn btn-success mt-3"
-                            disabled={!selectedFields[index] || !Object.values(selectedFields[index]).includes(true)}
-                            onClick={() => handleSave(index, item.DOCKET_NO)}>
-                            Save Changes
-                          </button>
-                        </form>
+                         <button
+                          type="button"
+                          className="btn btn-success mt-3"
+                          disabled={!selectedFields[index] || !Object.values(selectedFields[index]).includes(true)}
+                          onClick={() => handleSave(index)}>
+                          Save Changes
+                        </button>
+                       </form>
                       </div>
                     </div>
 
