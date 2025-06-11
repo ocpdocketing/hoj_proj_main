@@ -1,4 +1,43 @@
 <<<<<<< HEAD
+
+
+
+### INSTRUCTIONS ON HOW TO RUN THE PROGRAM
+
+> Open the XAMPP application
+> click start beside APACHE and MYSQL
+> then, click the admin button beside MYSQL
+
+------
+
+> click new terminal
+> type cd hoj_proj_main-main
+> copy and paste this : Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass ---- then click ENTER
+> copy and paste this : npm install then click ENTER 
+> copy and paste this : npm start
+
+--------
+
+> open new terminal by clicking the plus icon on the upper right corner of the terminal.
+> then type node server.js then click ENTER
+
+### FOR THE DATABSE
+
+> to import a file, click on the database okok
+> click on SQL tab above
+> Type: DROP TABLE cases;
+> click GO button below
+> click the import tab above
+> upload the mysql file then scroll down and click the import button
+
+
+
+
+-----------------------------------------------------------
+
+
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
